@@ -1,0 +1,179 @@
+1. 프로젝트 폴더 생성
+C:\bigdata_workspace
+
+2. JDK 설치
+- https://www.oracle.com/technetwork/java/javase/downloads/index.html
+- 설치 경로 수정(C:\bigdata_workspace)
+
+3. Download Hadoop 압축 해제
+- https://hadoop.apache.org/releases.html
+- 압축해제 경로 이동(C:\bigdata_workspace)
+
+4. 환경변수 설정
+
+HADOOP_HOME=C:\bigdata_workspace\hadoop-3.0.2
+HADOOP_BIN=C:\bigdata_workspace\hadoop-3.0.2\bin
+JAVA_HOME=c:\bigdata_workspace\Java\jdk1.8.0_211
+
+path=%JAVA_HOME%\bin;%HADOOP_HOME%\bin;%HADOOP_HOME%/sbin;
+
+
+5. 동작 확인
+시작 -> cmd.exe
+C:\>cd bigdata_workspace
+C:\bigdata_workspace>echo %hadoop_home%
+C:\bigdata_workspace\hadoop-3.0.2
+- 
+
+6. Hadoop 환경 설정
+- hadoop-env.cmd
+- core-site.xml
+- hdfs-site.xml
+- mapred-site.xml
+- yarn-site.xml
+
+6-1)C:\bigdata_workspace\hadoop-3.0.2\etc\hadoop\hadoop-env.cmd
+set JAVA_HOME=C:\bigdata_workspace\Java\jdk1.8.0_211
+set HADOOP_PREFIX=%HADOOP_HOME%
+set HADOOP_CONF_DIR=%HADOOP_PREFIX%\etc\hadoop
+set YARN_CONF_DIR=%HADOOP_CONF_DIR%
+set PATH=%PATH%;%HADOOP_PREFIX%\bin
+
+6-2)C:\bigdata_workspace\hadoop-3.0.2\etc\hadoop\core-site.xml
+<configuration>
+   <property>
+     <name>fs.default.name</name>
+     <value>hdfs://0.0.0.0:19000</value>
+   </property> 
+</configuration>
+
+6-3)C:\bigdata_workspace\hadoop-3.0.2\etc\hadoop\hdfs-site.xml
+<configuration>
+  <property>
+      <name>dfs.replication</name>
+      <value>1</value>
+   </property>
+   <property>
+      <name>dfs.namenode.name.dir</name>
+      <value>  file:///C:/bigdata_workspace/hadoop-3.0.2/data/namenode</value>
+	
+   </property>
+   <property>
+      <name>dfs.datanode.data.dir</name>
+      <value>file:///C:/bigdata_workspace/hadoop-3.0.2/data/datanode</value>
+   </property>
+</configuration>
+
+
+6-4)C:\bigdata_workspace\hadoop-3.0.2\etc\hadoop\mapred-site.xml
+<configuration>
+  <property>
+      <name>mapreduce.job.user.name</name>
+      <value>%USERNAME%</value>
+   </property>
+   <property>
+      <name>mapreduce.framework.name</name>
+      <value>yarn</value>
+   </property>
+    <property>
+     <name>yarn.apps.stagingDir</name>
+     <value>file:///C:/bigdata_workspace/hadoop-3.0.2/staging</value>
+   </property>
+   <property>
+      <name>mapreduce.jobtracker.address</name>
+      <value>local</value>
+   </property>
+</configuration>
+
+
+6-5)C:\bigdata_workspace\hadoop-3.0.2\etc\hadoop\yarn-site.xml
+<configuration>
+
+<!-- Site specific YARN configuration properties -->
+<property>
+    	<name>yarn.nodemanager.aux-services</name>
+    	<value>mapreduce_shuffle</value>
+   </property>
+   <property>
+      	<name>yarn.nodemanager.auxservices.mapreduce.shuffle.class</name>  
+	<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+   </property>
+</configuration>
+
+
+7. 하둡 실행
+- winutils-master\bin을 C:\bigdata_workspace\hadoop-3.0.2\bin 복사
+- hadoop namenode -format (네임노드 포맷)
+
+(deprecated 경고 발생, 무시해도 됨. 아래 해결책)
+hadoop fs -copyFromLocal '/home/hadoop/input' '/home/hadoop/output'; 
+hadoop fs -copyFromLocal input input // this uses FsShell
+hadoop dfs -copyFromLocal input input // this uses the now deprecated HDFS-specific DFSShell
+
+
+FS Shell :  FileSystem (FS) shell 
+DFShell  :  HDFS shell is invoked by bin/hadoop dfs . 
+
+
+8. Launch Hadoop(Testing)테스트 실행
+"%HADOOP_HOME%\sbin" - "start-all.cmd" 실행
+
+- 브라우저 접속
+http://localhost:8088  - Resource Manager
+http://localhost:8042  - Node Manager
+http://localhost:50070 - Name Node
+http://localhost:50075 - Data Node
+
+
+9. hadoop hdfs 테스트
+C:\bigdata_workspace>hdfs dfs -ls /
+C:\bigdata_workspace>hdfs dfs -mkdir /test
+C:\bigdata_workspace>hdfs dfs -copyFromLocal Sample.txt /test
+C:\bigdata_workspace>hdfs dfs -ls /test
+
+
+10. SPARK 실행
+SPARK_HOME = C:\bigdata_workspace\spark-2.4.3
+
+PATH  -  %SPARK_HOME%\bin 
+
+10-1)Launch Spark Shell (Scala)
+C:\bigdata_workspace>spark-shell
+    - 종료 scala> :quit
+
+
+10-2)Launch PySpark Shell
+c:\bigdata_workspace>pyspark
+   - 종료: 'exit()'
+sc.version
+sc.master
+sc.appName
+
+
+11, Spark - Create RDDs
+11-1)spark-shell
+val empRDD = sc.textFile("C:/Users/User/Documents/Work/Data/Employees.txt")
+empRDD.count()
+empRDD.collect()
+
+11-2)
+empRDD = sc.textFile("C:/Users/User/Documents/Work/Data/Employees.txt")
+empRDD.count() 
+empRDD.collect()
+
+
+12. Spark - Create Data Frames
+people = spark.read.json("C:/Users/User/Documents/Work/Data/People.json")
+people.show()
+people.write.parquet("C:/Users/User/Documents/Work/Data/People.parquet")
+
+
+13. Spark -  Read and Write files on HDFS
+- location of source/destination, mention the HDFS namespace.
+spark.read.json("hdfs://<Hadoop's default FS/<Directory>/<file.json>")
+
+hdfs getconf -confkey fs.defaultFS
+
+
+14. Spark WebUI
+ http://localhost:4040
