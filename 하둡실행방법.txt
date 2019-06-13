@@ -1,0 +1,42 @@
+제어판
+
+1) 시스템 - 고급 시스템 설정 - 환경변수 - 시스템변수
+  새로만들기 버튼 클릭
+
+ - 변수이름: JAVA_HOME
+   변수 값:  C:\bigdata_workspace\Java\jdk1.8.0_211
+
+   변수이름: HADOOP_HOME
+   변수 값 : C:\bigdata_workspace\hadoop-3.0.2
+
+   변수 이름중 path 클릭 - 새로만들기
+   %JAVA_HOME%\bin
+   
+    - 새로만들기
+   %HADOOP_HOME%\bin
+
+   - 새로만들기
+    %HADOOP_HOME%\sbin
+
+2) cmd.exe를 관리자 권한으로 실행
+ - 찾기 - cmd.exe - 마우스 오른쪽 - 관리자권한으로 시작
+
+3) 실행
+C:\WINDOWS\system32>cd \
+C:\>cd bigdata_workspace
+C:\bigdata_workspace>start-all.cmd
+  
+
+4) 브라우저 접속
+http://localhost:8088  - Resource Manager
+http://localhost:8042  - Node Manager
+http://localhost:50070 - Name Node
+http://localhost:50075 - Data Node
+
+
+5) hadoop hdfs 테스트
+C:\bigdata_workspace>hdfs dfs -ls /
+C:\bigdata_workspace>hdfs dfs -mkdir /test
+C:\bigdata_workspace>hdfs dfs -copyFromLocal Sample.txt /test
+C:\bigdata_workspace>hdfs dfs -ls /test
+C:\bigdata_workspace>hdfs dfs -cat /test/Sample.txt
