@@ -153,34 +153,39 @@ sc.appName
 
 11, Spark - Create RDDs
 11-1)spark-shell
-val empRDD = sc.textFile("C:/bigdata_workspace/Employees.txt")
-empRDD.count()
-empRDD.collect()
+scala> val empRDD = sc.textFile("C:/bigdata_workspace/Employees.txt")
+scala> empRDD.count()
+scala> empRDD.collect()
 
 11-2)
-empRDD = sc.textFile("C:/Users/User/Documents/Work/Data/Employees.txt")
-empRDD.count() 
-empRDD.collect()
+scala> empRDD = sc.textFile("C:/Users/User/Documents/Work/Data/Employees.txt")
+scala> empRDD.count() 
+scala> empRDD.collect()
 
 
 12. Spark - Create Data Frames
-people = spark.read.json("C:/Users/User/Documents/Work/Data/People.json")
-people.show()
-people.write.parquet("C:/Users/User/Documents/Work/Data/People.parquet")
+scala> people = spark.read.json("C:/Users/User/Documents/Work/Data/People.json")
+scala> people.show()
+scala> people.write.parquet("C:/Users/User/Documents/Work/Data/People.parquet")
 
 
 13. Spark -  Read and Write files on HDFS
 - location of source/destination, mention the HDFS namespace.
-spark.read.json("hdfs://<Hadoop's default FS/<Directory>/<file.json>")
+scala> spark.read.json("hdfs://<Hadoop's default FS/<Directory>/<file.json>")
 
-hdfs getconf -confkey fs.defaultFS
+13-1) Hadoop's default FS/ 에서 확인 방법
+ -다른 명령창에서
+C:\bigdata_workspace> hdfs getconf -confkey fs.defaultFS
 
-val textFile = sc.textFile("hdfs://0.0.0.0:19000/test/sample_kmeans_data.txt")
-val counts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
-counts.saveAsTextFile("hdfs://0.0.0.0:19000/test/textFileResult")
+scala> val textFile = sc.textFile("hdfs://0.0.0.0:19000/test/sample_kmeans_data.txt")
+scala> val counts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+scala> counts.take(30)
+
+scala>counts.saveAsTextFile("hdfs://0.0.0.0:19000/test/textFileResult")
 
 
-hdfs dfs -ls /test/textFileResult
+-결과 확인 - 다른 명령창에서
+C:\bigdata_workspace> hdfs dfs -ls /test/textFileResult
 
 
 14. Spark WebUI
