@@ -15,7 +15,7 @@ HADOOP_HOME=C:\bigdata_workspace\hadoop-3.0.2
 HADOOP_BIN=C:\bigdata_workspace\hadoop-3.0.2\bin
 JAVA_HOME=c:\bigdata_workspace\Java\jdk1.8.0_211
 
-- 기존 path에 
+-기존 path 뒤에 설정.
 path=%JAVA_HOME%\bin;%HADOOP_HOME%\bin;%HADOOP_HOME%/sbin;
 
 
@@ -134,7 +134,7 @@ C:\bigdata_workspace>hdfs dfs -ls /test
 
 
 10. SPARK 실행
-SPARK_HOME = C:\bigdata_workspace\spark-2.4.3
+SPARK_HOME=C:\bigdata_workspace\spark-2.4.3
 
 PATH  -  %SPARK_HOME%\bin 
 
@@ -153,7 +153,7 @@ sc.appName
 
 11, Spark - Create RDDs
 11-1)spark-shell
-val empRDD = sc.textFile("C:/Users/User/Documents/Work/Data/Employees.txt")
+val empRDD = sc.textFile("C:/bigdata_workspace/Employees.txt")
 empRDD.count()
 empRDD.collect()
 
@@ -174,6 +174,13 @@ people.write.parquet("C:/Users/User/Documents/Work/Data/People.parquet")
 spark.read.json("hdfs://<Hadoop's default FS/<Directory>/<file.json>")
 
 hdfs getconf -confkey fs.defaultFS
+
+val textFile = sc.textFile("hdfs://0.0.0.0:19000/test/sample_kmeans_data.txt")
+val counts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+counts.saveAsTextFile("hdfs://0.0.0.0:19000/test/textFileResult")
+
+
+hdfs dfs -ls /test/textFileResult
 
 
 14. Spark WebUI
