@@ -2,4 +2,4 @@ set HADOOP_HOME=C:\bigdata_workspace\hadoop-3.0.2
 set HADOOP_BIN=C:\bigdata_workspace\hadoop-3.0.2\bin
 set JAVA_HOME=c:\bigdata_workspace\Java\jdk1.8.0_211
 
-set path=%JAVA_HOME%\bin;%HADOOP_HOME%\bin;%HADOOP_HOME%/sbin;
+set path=%systemroot%\system32;%JAVA_HOME%\bin;%HADOOP_HOME%\bin;%HADOOP_HOME%/sbin;
