@@ -15,6 +15,7 @@ HADOOP_HOME=C:\bigdata_workspace\hadoop-3.0.2
 HADOOP_BIN=C:\bigdata_workspace\hadoop-3.0.2\bin
 JAVA_HOME=c:\bigdata_workspace\Java\jdk1.8.0_211
 
+- 기존 path에 
 path=%JAVA_HOME%\bin;%HADOOP_HOME%\bin;%HADOOP_HOME%/sbin;
 
 
